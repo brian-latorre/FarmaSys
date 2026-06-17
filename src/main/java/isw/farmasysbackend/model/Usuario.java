@@ -1,12 +1,15 @@
 package isw.farmasysbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -22,18 +25,25 @@ public class Usuario {
     private String username;
 
     @Column(name = "password", nullable = false, length = 255)
+    @JsonIgnore
     private String password;
 
+    @Builder.Default
     @Column(name = "estado", nullable = false, length = 20)
-    private String estado;
+    private String estado = "ACTIVO";
 
-    // Relación: Muchos usuarios pueden tener un mismo Rol
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_rol", nullable = false)
     private Rol rol;
 
-    // Relación: Muchos usuarios pueden trabajar en una misma Sede
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_sede", nullable = false)
     private Sede sede;
+
+    @PrePersist
+    void prePersist() {
+        if (estado == null || estado.isBlank()) {
+            estado = "ACTIVO";
+        }
+    }
 }

@@ -3,18 +3,20 @@ package isw.farmasysbackend.controller;
 import isw.farmasysbackend.dto.ProductoRequest;
 import isw.farmasysbackend.dto.ProductoResponse;
 import isw.farmasysbackend.service.ProductoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/productos")
 public class ProductoController {
 
-    @Autowired
-    private ProductoService productoService;
+    private final ProductoService productoService;
 
     @GetMapping
     public ResponseEntity<List<ProductoResponse>> obtenerProductos() {
@@ -22,8 +24,8 @@ public class ProductoController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductoResponse> registrarProducto(@RequestBody ProductoRequest productoRequest) {
+    public ResponseEntity<ProductoResponse> registrarProducto(@Valid @RequestBody ProductoRequest productoRequest) {
         ProductoResponse nuevoProducto = productoService.guardar(productoRequest);
-        return ResponseEntity.ok(nuevoProducto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoProducto);
     }
 }

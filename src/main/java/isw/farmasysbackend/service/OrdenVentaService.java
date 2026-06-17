@@ -1,18 +1,20 @@
 package isw.farmasysbackend.service;
 
-import isw.farmasysbackend.model.OrdenVenta;
+import isw.farmasysbackend.dto.OrdenVentaResponse;
 import isw.farmasysbackend.repository.OrdenVentaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrdenVentaService {
 
-    @Autowired
-    OrdenVentaRepository ordenVentaRepository;
+    private final OrdenVentaRepository ordenVentaRepository;
 
-    public List<OrdenVenta> getOrdenesVenta() {
-        return ordenVentaRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<OrdenVentaResponse> getOrdenesVenta() {
+        return OrdenVentaResponse.fromEntities(ordenVentaRepository.findAll());
     }
 }

@@ -1,19 +1,21 @@
 package isw.farmasysbackend.service;
 
-import isw.farmasysbackend.model.Usuario;
+import isw.farmasysbackend.dto.UsuarioResponse;
 import isw.farmasysbackend.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UsuarioService {
 
-    @Autowired
-    UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public List<Usuario> getUsuarios() {
-        return usuarioRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<UsuarioResponse> getUsuarios() {
+        return UsuarioResponse.fromEntities(usuarioRepository.findAll());
     }
 }

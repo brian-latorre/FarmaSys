@@ -2,17 +2,19 @@ package isw.farmasysbackend.service;
 
 import isw.farmasysbackend.model.Sede;
 import isw.farmasysbackend.repository.SedeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SedeService {
 
-    @Autowired
-    SedeRepository sedeRepository;
+    private final SedeRepository sedeRepository;
 
+    @Transactional(readOnly = true)
     public List<Sede> getSedes() {
         return sedeRepository.findAll();
     }

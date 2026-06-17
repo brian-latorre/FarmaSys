@@ -2,17 +2,19 @@ package isw.farmasysbackend.service;
 
 import isw.farmasysbackend.model.Rol;
 import isw.farmasysbackend.repository.RolRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RolService {
 
-    @Autowired
-    RolRepository rolRepository;
+    private final RolRepository rolRepository;
 
+    @Transactional(readOnly = true)
     public List<Rol> getRoles() {
         return rolRepository.findAll();
     }
