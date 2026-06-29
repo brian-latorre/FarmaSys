@@ -24,7 +24,32 @@ public class ProductoController {
 
     @PostMapping
     public ResponseEntity<ProductoResponse> registrarProducto(@RequestBody ProductoRequest productoRequest) {
-        ProductoResponse nuevoProducto = productoService.guardar(productoRequest);
-        return ResponseEntity.ok(nuevoProducto);
+        try {
+            ProductoResponse nuevoProducto = productoService.guardar(productoRequest);
+            return ResponseEntity.ok(nuevoProducto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductoResponse> editarProducto(@PathVariable Long id, @RequestBody ProductoRequest productoRequest) {
+        try {
+            productoRequest.setId(id);
+            ProductoResponse actualizado = productoService.guardar(productoRequest);
+            return ResponseEntity.ok(actualizado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
+        try {
+            productoService.eliminar(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
